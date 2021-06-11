@@ -1,0 +1,31 @@
+#app
+  .phone
+    .calender
+      .yymm
+        .monthRed_btn(@click="looking.month--;countDays()") -
+        .year {{looking.year }} 年
+        .month {{looking.month}} 月
+        .monthAdd_btn(@click="looking.month++,countDays()") + 
+      .head
+        .tag(v-for="tag in tags") {{ tag }}
+      .body 
+        .daybox(
+          v-for='(day,day_id) in getDays',
+          :class="day.id == selected_day.id ? 'active' : ''",
+          @click="(selected_day.id = day.id)",
+          :style="get_pen(day.id)"
+        )
+          .infos
+            .num {{ day.id }}
+            .lunar {{ lunar(day.id + lunar_pan) }}           
+          .eventbox( 
+          :class="day.events.length >0 && day.year==looking.year && day.month==looking.month  ? 'has_events' : ''")
+    transition-group.todos(tag="ul", name="fade", mode="out-in")
+      li.items(v-for='(todo,todo_id) in now_events', :key="todo")
+        .time {{ todo.time }}
+        .title {{ todo.title }}
+        .remove_btn(@click="now_events.splice(todo_id, 1)") x
+  .form
+    input(placeholder="事件標題", v-model="new_item.title")
+    input(placeholder="時間", v-model="new_item.time")
+    button(@click="add_item") 加入

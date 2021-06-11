@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - A Pen by Salmon</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="app">
+  <div class="phone">
+    <div class="calender">
+      <div class="yymm">
+        <div class="monthRed_btn" @click="looking.month--;countDays()">-</div>
+        <div class="year">{{looking.year }} 年</div>
+        <div class="month">{{looking.month}} 月</div>
+        <div class="monthAdd_btn" @click="looking.month++,countDays()">+ </div>
+      </div>
+      <div class="head">
+        <div class="tag" v-for="tag in tags">{{ tag }}</div>
+      </div>
+      <div class="body"> 
+        <div class="daybox" v-for="(day,day_id) in getDays" :class="day.id == selected_day.id ? 'active' : ''" @click="(selected_day.id = day.id)" :style="get_pen(day.id)">
+          <div class="infos">
+            <div class="num">{{ day.id }}</div>
+            <div class="lunar">{{ lunar(day.id + lunar_pan) }}           </div>
+          </div>
+          <div class="eventbox" :class="day.events.length &gt;0 &amp;&amp; day.year==looking.year &amp;&amp; day.month==looking.month  ? 'has_events' : ''"></div>
+        </div>
+      </div>
+    </div>
+    <transition-group class="todos" tag="ul" name="fade" mode="out-in">
+      <li class="items" v-for="(todo,todo_id) in now_events" :key="todo">
+        <div class="time">{{ todo.time }}</div>
+        <div class="title">{{ todo.title }}</div>
+        <div class="remove_btn" @click="now_events.splice(todo_id, 1)">x</div>
+      </li>
+    </transition-group>
+  </div>
+  <div class="form">
+    <input placeholder="事件標題" v-model="new_item.title"/>
+    <input placeholder="時間" v-model="new_item.time"/>
+    <button @click="add_item">加入</button>
+  </div>
+</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
